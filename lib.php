@@ -33,3 +33,43 @@ function block_sharing_cart_after_file_deleted($file) {
     $cleaner = new \block_sharing_cart\files\cleaner($DB, $file);
     $cleaner->remove_related_sharing_cart_entity();
 }
+
+/**
+ * Extend navigation for theme_snap.
+ * @param cm_info $cm
+ * @return array
+ */
+function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
+    // Check that user has capability to use sharing cart (e.g. backup/restore or whatever).
+    global $PAGE, $COURSE;
+    if ($PAGE->blocks->is_block_present('sharing_cart')) {
+        // Create action button.
+        $button = new stdClass();
+        $button->url = '#';
+        $button->text = get_string('backup', 'block_sharing_cart');
+        $params = [
+                'course' => [
+                        'id' => $COURSE->id,
+                        'is_frontpage' => ($COURSE->id == SITEID),
+                ],
+                'add_method' => get_config('block_sharing_cart', 'add_to_sharing_cart'),
+                'iconBackup' => [
+                        'pix' => 't/copy',     // Moodle core icon identifier.
+                        'css' => 'editing_backup',
+                ],
+                'courseSections' => $cm,
+
+        ];
+
+        $PAGE->requires->js_call_amd(
+                'block_sharing_cart/integrate_snap',
+                'init',
+                [
+                        $params,
+
+                ]
+        );
+    }
+
+    return [];
+}

@@ -755,6 +755,13 @@ export const init = function(addMethod) {
                 } else {
                     const $container = $('.course-content');
                     $container.prepend($clipboard);
+                    if (M.cfg.theme === 'snap') {
+                        $container.find('li.section').each(function (index, sectionDOM) {
+                            const $section = $(sectionDOM);
+                            const section = $section.attr('id').match(/(\d+)$/)[1];
+                            $section.prepend(create_target(id, section));
+                        }, this);
+                    }
                     $container.find('[data-for="section"]').each(function (index, sectionDOM) {
                         const $section = $(sectionDOM);
                         const section = $section.attr('id').match(/(\d+)$/)[1];
