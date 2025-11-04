@@ -104,7 +104,7 @@ $string['forbidden'] = 'You don\'t have any permissions to access this shared it
 $string['backupnotfound'] = 'Backup file not found';
 $string['requirejs'] = 'Sharing Cart requires JavaScript enabled in your browser';
 $string['requireajax'] = 'Sharing Cart requires AJAX';
-
+$string['snap_dialog_restore'] = 'Choose the section in which you want to restore the resource:';
 $string['variouscourse'] = 'from various courses';
 
 $string['section_name_conflict'] = 'Section conflict';

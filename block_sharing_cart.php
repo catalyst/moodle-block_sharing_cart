@@ -144,6 +144,7 @@ class block_sharing_cart extends block_base {
                 'modal_confirm_delete',
                 'backup_heavy_load_warning_message',
                 'drop_here',
+                'snap_dialog_restore',
             ],
             __CLASS__
         );

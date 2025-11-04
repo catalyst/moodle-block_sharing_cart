@@ -47,28 +47,31 @@ function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
         $button = new stdClass();
         $button->url = '#';
         $button->text = get_string('backup', 'block_sharing_cart');
+        $sectionsjs = [];
+        $sections = get_fast_modinfo($COURSE)->get_section_info_all();
+        foreach ($sections as $section) {
+            $newsection = new stdClass();
+            $newsection->id = $section->id;
+            $newsection->num = $section->section;
+            $newsection->name = $section->name;
+            array_push($sectionsjs, $newsection);
+        }
         $params = [
                 'course' => [
                         'id' => $COURSE->id,
                         'is_frontpage' => ($COURSE->id == SITEID),
                 ],
+                'sectionsjs' => $sectionsjs,
+                'courseSections' => $cm,
                 'add_method' => get_config('block_sharing_cart', 'add_to_sharing_cart'),
                 'iconBackup' => [
                         'pix' => 't/copy',     // Moodle core icon identifier.
                         'css' => 'editing_backup',
                 ],
-                'courseSections' => $cm,
-
         ];
 
         $PAGE->requires->js_call_amd(
-                'block_sharing_cart/integrate_snap',
-                'init',
-                [
-                        $params,
-
-                ]
-        );
+                'block_sharing_cart/integrate_snap', 'init', [$params]);
     }
 
     return [];

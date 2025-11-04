@@ -11,13 +11,16 @@ export const init = function(params) {
             return;
         }
 
-        const scSnap = new SharingCartForSnap(params.courseSections);
+        const scSnap = new SharingCartForSnap(params);
+        window.snapSharingCart = new SharingCartForSnap(params);
 
         scSnap.snapFix({
             course: params.course,
             iconBackup: params.iconBackup,
             on_backup: $.on_backup,
             on_section_backup: $.on_section_backup,
+            courseSections:params.courseSections,
+            sectionsjs:params.sectionsjs,
         });
     });
 };
