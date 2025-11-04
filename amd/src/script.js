@@ -754,19 +754,14 @@ export const init = function(addMethod) {
                     }
                 } else {
                     const $container = $('.course-content');
-                    $container.prepend($clipboard);
-                    if (M.cfg.theme === 'snap') {
-                        $container.find('li.section').each(function (index, sectionDOM) {
+                    if (M.cfg.theme !== 'snap') {
+                        $container.prepend($clipboard);
+                        $container.find('[data-for="section"]').each(function (index, sectionDOM) {
                             const $section = $(sectionDOM);
                             const section = $section.attr('id').match(/(\d+)$/)[1];
-                            $section.prepend(create_target(id, section));
+                            $section.find('ul.section').first().append(create_target(id, section));
                         }, this);
                     }
-                    $container.find('[data-for="section"]').each(function (index, sectionDOM) {
-                        const $section = $(sectionDOM);
-                        const section = $section.attr('id').match(/(\d+)$/)[1];
-                        $section.find('ul.section').first().append(create_target(id, section));
-                    }, this);
                 }
             };
         }();
@@ -1007,6 +1002,13 @@ export const init = function(addMethod) {
             }
 
             restore_targets.show(id);
+            if (window.snapSharingCart && typeof window.snapSharingCart.onRestore === 'function') {
+                window.snapSharingCart.id = id;
+                window.snapSharingCart.restore_targets = restore_targets;
+                window.snapSharingCart.onRestore(window.snapSharingCart);
+            } else {
+                console.warn('Snap sharing cart not available or missing onRestore()');
+            }
         };
 
         /**
