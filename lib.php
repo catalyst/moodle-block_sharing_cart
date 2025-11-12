@@ -43,10 +43,6 @@ function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
     // Check that user has capability to use sharing cart (e.g. backup/restore or whatever).
     global $PAGE, $COURSE;
     if ($PAGE->blocks->is_block_present('sharing_cart')) {
-        // Create action button.
-        $button = new stdClass();
-        $button->url = '#';
-        $button->text = get_string('backup', 'block_sharing_cart');
         $sectionsjs = [];
         $sections = get_fast_modinfo($COURSE)->get_section_info_all();
         foreach ($sections as $section) {
@@ -68,6 +64,7 @@ function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
                         'pix' => 't/copy',     // Moodle core icon identifier.
                         'css' => 'editing_backup',
                 ],
+                'lazy' => get_config('theme_snap', 'coursepartialrender'),
         ];
 
         $PAGE->requires->js_call_amd(

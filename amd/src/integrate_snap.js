@@ -21,6 +21,7 @@ export const init = function(params) {
             on_section_backup: $.on_section_backup,
             courseSections:params.courseSections,
             sectionsjs:params.sectionsjs,
+            lazy:params.lazy,
         });
     });
 };
