@@ -42,11 +42,14 @@ function block_sharing_cart_after_file_deleted($file) {
 function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
     // Check that user has capability to use sharing cart (e.g. backup/restore or whatever).
     global $PAGE, $COURSE;
+    $button = new stdClass();
     if ($PAGE->blocks->is_block_present('sharing_cart')) {
         // Create action button.
-        $button = new stdClass();
-        $button->url = '#';
+        $button->url = 'javascript:void(0)';
         $button->text = get_string('backup', 'block_sharing_cart');
+        $button->icon = new stdClass();
+        $button->icon->pix = 't/copy';
+        $button->icon->component = 'core';
         $sectionsjs = [];
         $sections = get_fast_modinfo($COURSE)->get_section_info_all();
         foreach ($sections as $section) {
@@ -68,6 +71,7 @@ function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
                         'pix' => 't/copy',     // Moodle core icon identifier.
                         'css' => 'editing_backup',
                 ],
+                'lazy' => get_config('theme_snap', 'coursepartialrender'),
         ];
 
         $PAGE->requires->js_call_amd(

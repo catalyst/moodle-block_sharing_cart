@@ -1081,17 +1081,19 @@ export const init = function(addMethod) {
                 const $item = $(item);
                 const isCopying = $item.attr('data-is-copying') === '1';
                 const $commands = $item.find('.commands').first();
+                if (!$commands.find('.' + icon[actions[0]].css).length > 0) {
+                    $.each(actions, function (index, action) {
+                        if (action === 'restore' && isCopying) {
+                            return;
+                        }
+                        const $command = create_command(action);
+                        $command.on('click', function (e) {
+                            $['on_' + action](e);
+                        });
+                        $commands.append($command);
 
-                $.each(actions, function(index, action) {
-                    if (action === 'restore' && isCopying) {
-                        return;
-                    }
-                    const $command = create_command(action);
-                    $command.on('click', function(e) {
-                        $['on_' + action](e);
-                    });
-                    $commands.append($command);
-                }, this);
+                    }, this);
+                }
             }
 
             const activity_actions = ['movedir', 'move', 'delete'];
