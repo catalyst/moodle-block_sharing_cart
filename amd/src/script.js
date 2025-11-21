@@ -1006,8 +1006,51 @@ export const init = function(addMethod) {
                 window.snapSharingCart.id = id;
                 window.snapSharingCart.restore_targets = restore_targets;
                 window.snapSharingCart.onRestore(window.snapSharingCart);
-            } else {
-                console.warn('Snap sharing cart not available or missing onRestore()');
+            } else if (M.cfg.theme === 'snap') {
+                let sectionName = null;
+                let sectionsURLs = [];
+                $('#chapters').find('.chapter-title').each(function () {
+                    const courseId = parseInt(String($('body').attr('class')).match(/course-([0-9]*)( |$)/)[1]);
+                    var urlArray = {
+                        'directory': restore_targets.is_directory,
+                        'target': id,
+                        'course': courseId,
+                        'section': $(this).attr('section-number'),
+                        'sesskey': M.cfg.sesskey,
+                        'returnurl': document.URL,
+                        'in_section': $('#copy-section-form').data('in-section')
+                    };
+                    let url = get_action_url('restore', urlArray);
+                    sectionName = $(this).text();
+                    let sectionURL = {
+                        name: sectionName,
+                        url: url
+                    };
+                    sectionsURLs.push(sectionURL);
+                });
+                ModalFactory.create({
+                    type: ModalFactory.types.SAVE_CANCEL,
+                    title: M.str.block_sharing_cart['restore'],
+                    body: ((sections) => {
+                        let s = M.str.block_sharing_cart['snap_dialog_restore'];
+                        // Create Select element.
+                        s += '<select id="select-dialog" class="custom-select">';
+                        for (let i = 0; i < sections.length; i++) {
+                            s += '<option value="' + sections[i].url + '">' + sections[i].name + '</option>';
+                        }
+                        s += '</select> <br> <br>';
+                        return s;
+                    })(sectionsURLs)
+                })
+                    .done(function (modal) {
+                        modal.show();
+                        modal.getRoot().on(ModalEvents.save, function () {
+                            window.location.href = $('#select-dialog').val();
+                        });
+                        modal.getRoot().on(ModalEvents.cancel, function () {
+                            modal.destroy();
+                        });
+                    });
             }
         };
 
