@@ -41,8 +41,8 @@ function block_sharing_cart_after_file_deleted($file) {
  */
 function block_sharing_cart_extend_module_editing_buttons(\cm_info $cm): array {
     // Check that user has capability to use sharing cart (e.g. backup/restore or whatever).
-    global $PAGE, $COURSE;
-    if ($PAGE->blocks->is_block_present('sharing_cart')) {
+    global $PAGE, $COURSE, $USER;
+    if ($USER->editing) {
         $sectionsjs = [];
         $sections = get_fast_modinfo($COURSE)->get_section_info_all();
         foreach ($sections as $section) {
