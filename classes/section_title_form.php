@@ -69,7 +69,7 @@ class section_title_form extends \moodleform {
 
         foreach ($this->sections as $section) {
             $option_title = get_string('conflict_overwrite_title', 'block_sharing_cart', $section->name);
-            $option_title .= ($section->summary != null) ? '<br><div class="small"><strong>'.get_string('summary').':</strong> '.strip_tags($section->summary).'</div>' : '';
+            $option_title .= ($section->summary != null) ? '<br><div class="small text-wrap"><strong>'.get_string('summary').':</strong> '.strip_tags($section->summary).'</div>' : '';
             $mform->addElement('radio', 'overwrite', $option_title, null, $section->id);
         }
 
